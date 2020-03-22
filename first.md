@@ -136,7 +136,7 @@ get custom.iso
 (磁盘custom.iso就传送到电脑中Putty文件夹中了)
 
 # 录屏
-<https://weibo.com/tv/v/IzGtCxJyJ?fid=1034:4485047168729091?\>
+<https://weibo.com/tv/v/IzGtCxJyJ?fid=1034:4485047168729091>
 
 (用微博上传的，bili审核不过，里面不小心把轰猫的声音录进去了orz)
 
