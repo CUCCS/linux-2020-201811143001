@@ -1,0 +1,75 @@
+sudo: required
+language: bash
+
+before_install:
+        - sudo apt-get update -q
+        - export scversion="stable" # or "v0.4.7", or "latest"
+        - wget "https://storage.googleapis.com/shellcheck/shellcheck-${scversion}.linux.x86_64.tar.xz"
+        - tar --xz -xvf shellcheck-"${scversion}".linux.x86_64.tar.xz
+        - sudo cp shellcheck-"${scversion}"/shellcheck /usr/bin/
+        - /usr/bin/shellcheck --version
+
+         #安装任务一需要使用的工具imagemagick 
+        - sudo apt-get install imagemagick 
+        - sudo apt install ghostscript
+
+        #下载任务2-1需要使用的文件
+        - wget "https://c4pr1c3.github.io/LinuxSysAdmin/exp/chap0x04/worldcupplayerinfo.tsv"
+        #下载任务2-2需要使用的文件
+        - wget "https://c4pr1c3.github.io/LinuxSysAdmin/exp/chap0x04/web_log.tsv.7z"
+        - sudo apt install p7zip-full
+        - 7z x web_log.tsv.7z
+script:
+
+         #任务一:用bash编写一个图片批处理脚本
+         #帮助文档
+         - bash tasks/5-1.sh -h  
+          
+         #对jpeg格式图片进行图片质量压缩
+         - bash tasks/5-1.sh -q 80 ./img
+          
+         #对jpeg/png/svg格式图片在保持原始宽高比的前提下压缩分辨率
+         - bash tasks/5-1.sh -r 50 ./img
+          
+         #批量添加自定义文本水印
+         - bash tasks/5-1.sh -w a_watermark ./img
+          
+         #前缀
+         - bash tasks/5-1.sh -p a_head ./img
+          
+         #后缀
+         - bash tasks/5-1.sh -s a_tail ./img
+       
+         #将png/svg图片统一转换为jpg格式图片
+         - bash tasks/5-1.sh -c ./img
+          
+         #任务二：用bash编写一个文本批处理脚本
+         #worldcup
+         - bash tasks/5-2.sh -h
+         - bash tasks/5-2.sh -a
+         - bash tasks/5-2.sh -b
+         - bash tasks/5-2.sh -c
+         - bash tasks/5-2.sh -d
+          
+         #web_log
+         - bash tasks/5-3.sh -h
+         - bash tasks/5-3.sh -a
+         - bash tasks/5-3.sh -b
+         - bash tasks/5-3.sh -c
+         - bash tasks/5-3.sh -d
+         - bash tasks/5-3.sh -e
+         - bash tasks/5-3.sh -u /images/USA-logosmall.gif
+after_script:
+        - /usr/bin/shellcheck tasks/5-1.sh
+        - /usr/bin/shellcheck tasks/5-2.sh
+        - /usr/bin/shellcheck tasks/5-3.sh
+
+after_failure:
+        - id
+        - pwd
+        - df -h
+        - cat error.log
+
+notifications:
+          email:
+                  on_success: never
